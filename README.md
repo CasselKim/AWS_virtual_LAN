@@ -85,7 +85,11 @@ EC2는 물리적 네트워크에서 PC와 같은 포지션이라고 했다. EC2�
 
 ![image](image10.png)  
 
-웹서버 용 인스턴스를 퍼블릭 서브넷에 생성한다.  \
+웹서버 용 인스턴스를 퍼블릭 서브넷에 생성한다.  
+
+![image](image22.png)  
+
+새로운 탄력적IP를 생성해 연결해준다.    
 
 ### RDS 생성하기  
 
@@ -129,5 +133,112 @@ EC2는 물리적 네트워크에서 PC와 같은 포지션이라고 했다. EC2�
 
 ![image](image20.png)  
 
-## 5. EC2 인스턴스에 웹 프로젝트 올리기
+## 5. 인스턴스에 웹 서버, RDS에 MySQL 올리기
+
+EC2에 올릴 테스트용 웹 서버를 장고로 간단하게 만들어보았다. - [튜토리얼](https://docs.djangoproject.com/ko/4.0/), [깃허브](https://github.com/CasselKim/web_server_for_testing)  
+
+![image](image21.png)  
+
+질문을 올리면 리스트로 나타나는 웹서버이다. id, 질문내용, 날짜가 mysql에 저장된다. 웹 서버는 EC2에, MySQL은 RDS에 올려보자.  
+
+### 1. EC2,RDS 인바운드 규칙 설정
+
+EC2와 RDS가 서로 통신하기 위해 인바운드 규칙을 설정한다. 추가로 장고 통신을 위한 8000포트도 열어두자.  
+
+![image](image25.png)  
+
+  ### 2. EC2에서 RDS 접근하기
+
+SSH연결로 EC2에 접근해보자. AWS창 -> EC2 -> 인스턴스 -> 인스턴스 선택 후 연결 -> 프라이빗 키 생성  
+
+![image](image26.png)  
+
+![image](image27.png)  
+
+SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (EC2를 만든 직후는 아~무것도 없음)  
+
+- `sudo apt-get update`  
+
+- `sudo apt-get install git`  
+
+- `sudo apt-get install vim`  
+
+- `sudo apt-get install python3-pip`  
+
+[RDS(MySQL) 연결하기](https://docs.aws.amazon.com/ko_kr/AmazonRDS/latest/UserGuide/USER_ConnectToInstance.html)  
+
+- `sudo apt-get install mysql-client`  
+- ![image](image24.png)    
+
+- RDS 창에 들어가서 **엔드포인트**, **포트번트 번호** // 수정 창에서 **비밀번호** // 구성 탭에서 **마스터 사용자 이름**을 기록해놓는다.
+- 다시 SSH창에 들어가서 `mysql -h 엔드포인트주소 -P 포트번호 -u 마스터사용자이름 -p` 치고 엔터. PASSWORD 치라고 나오면 비밀번호를 쳐서 접속한다.  
+- 이후 [MySQL 명령어](https://hardner.tistory.com/1)를 사용해서 데이터베이스와 테이블을 생성해준다.  
+
+### 3. 장고 실행하기
+
+- `sudo pip3 install django`  
+
+- `sudo pip3 install mysqlclient`  
+
+- `cd` 명령어를 이용해서 manage.py가 있는 디렉토리로 이동한다.  
+
+- `vim secret.json`로 json 파일을 생성, `.gitignore`로 깃에 올리지 않았던 값들을 넣어준다. (필자의 경우 장고 SECRET_KEY와 RDS 비밀번호)
+
+- `vim settings.py`로 settings.py 파일에 접근
+
+  - ALLOWED_HOSTS = ['탄력적 IP주소'] 수정
+
+  - 데이터베이스 수정  
+
+    ```python 
+    DATABASES = {
+        'default' : {
+            'ENGINE' : 'django.db.backends.mysql',
+            'NAME' : 'django_table', #데이터베이스 이름
+            'USER' : 'admin', # RDS 데이터베이스 마스터 사용자 이름
+            'PASSWORD' : PASSWORD, # RDS 데이터베이스 비밀번호
+            'HOST' : 'ec2-52-79-159-215.ap-northeast-2.compute.amazonaws.com', # 퍼블릭 DNS 
+            'PORT' : '3306', # 포트번호
+        }
+    }
+    ```
+
+- `python3 manage.py inspectdb`로 장고-mysql의 연결 확인
+
+- `python3 manage.py makemigrations`
+
+- `python3 manage.py migrate`
+
+- `manage.py` 파일 위치로 돌아와서 `python3 manage.py runserver 0:8000`
+
+- ![image](image28.png)  
+
+### 4. 데이터 생성하기
+
+- `python3 manage.py createsuperuser`
+- User name, Email, Password 설정
+- `public domain:8000/admin` 접속
+- 로그인 후 데이터 생성하기
+- `public domain:8000/admin` 다시 접속
+- ![image](image29.png)  
+
+## 6. 로드밸런서(ELB) 써보기
+
+
+
+
+
+---
+
+### Reference
+
+[정환타님 개발노트](https://junghwanta.tistory.com/category/Dev-AWS)  
+
+[장고 공식문서](https://docs.djangoproject.com/ko/4.0/)  
+
+[AWS 공식문서](https://docs.aws.amazon.com/ko_kr/AmazonRDS/latest/UserGuide/USER_ConnectToInstance.html)  
+
+[공부혜옹님 블로그](https://hae-ong.tistory.com/25)  
+
+[Che1님 블로그](https://nachwon.github.io/django-deploy-1-aws/)  
 
