@@ -176,9 +176,13 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 
 ### 3. 장고 실행하기
 
+- `git clone`으로 프로젝트 가져오기
+
 - `sudo pip3 install django`  
 
 - `sudo pip3 install mysqlclient`  
+
+- (안되면 `sudo apt-get install libmysqlclient-dev` 하고 `sudo pip3 install mysqlclient`) 
 
 - `cd` 명령어를 이용해서 manage.py가 있는 디렉토리로 이동한다.  
 
@@ -209,7 +213,7 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 
 - `python3 manage.py migrate`
 
-- `manage.py` 파일 위치로 돌아와서 `python3 manage.py runserver 0:8000`
+- `python3 manage.py runserver 0:8000`
 
 - ![image](image28.png)  
 
@@ -223,6 +227,49 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 - ![image](image29.png)  
 
 ## 6. 로드밸런서(ELB) 써보기
+
+### 1. 새로운 퍼블릭 서브넷 - 웹서버 생성하기
+
+새로운 퍼블릭 서브넷을 생성, 똑같이 웹 서버를 올려준다.  
+
+![image](image30.png)  
+
+![image](image31.png)  
+
+![image](image32.png)  
+
+똑같이 만들어주었다.  
+
+### 2. 로드밸런서 타겟 그룹, 로드밸런서 생성하기
+
+![image](image35.png)  
+
+요렇게 만들어줄거다. 로드밸런서는 클라이언트에게 81번 포트로 먼저 요청을 받아 적절하게 분산, 인스턴스로 이루어진 타겟 그룹에 80번 포트로 요청을 뿌려준다.  
+
+먼저 타겟그룹부터 만든다. 
+
+![image](image34.png)  
+
+이후 인스턴스를 넣어서  타겟 그룹으로 묶어주자.  
+
+그 다음 로드밸런서를 만들텐데, 로드밸런서 -> 로드밸런서 생성 -> 어플리케이션 로드 밸런서 생성 순으로 누른다.  
+
+![image](image33.png)  
+
+이후로 Basic Configuration ->    Network mapping -> 보안그룹 생성 -> 리스너 and 라우팅 설정을 차례로 한다.  
+
+![image](image36.png)    
+
+![image](image37.png)   
+
+![image](image38.png)  
+
+인스턴스를 80번 포트로 열자. `sudo python3 manage.py runserver 0:80`  
+
+502 Bad GateWay가 뜬다.
+
+1. 이유 1 : 요청값을 내보낼 때 outbound 규칙에 걸린다.
+2. 이유 2 : RDS에 접근할 때 outbound 규칙에 걸린다.
 
 
 
