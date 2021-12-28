@@ -266,10 +266,11 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 
 인스턴스를 80번 포트로 열자. `sudo python3 manage.py runserver 0:80`  
 
-502 Bad GateWay가 뜬다.
+![image](image40.png)  
 
-1. 이유 1 : 요청값을 내보낼 때 outbound 규칙에 걸린다.
-2. 이유 2 : RDS에 접근할 때 outbound 규칙에 걸린다.
+(1. 보다 정확한 확인을 위해 index.html을 고쳐줬다.)   
+
+(2. 서버에 접속이 안된다면 내부 private ip를 ALLOWED HOST에 추가해주도록하자.)  
 
 
 
