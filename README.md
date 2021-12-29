@@ -278,6 +278,7 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 
 ## 7. Auto Scale 써보기
 
+[생활코딩강의](https://youtu.be/_1Yqk-fLkec)보고 계속해보자  
 
 
 ---
