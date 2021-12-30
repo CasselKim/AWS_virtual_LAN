@@ -278,7 +278,58 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 
 ## 7. Auto Scale 써보기
 
-[생활코딩강의](https://youtu.be/_1Yqk-fLkec)보고 계속해보자  
+[생활코딩강의](https://youtu.be/_1Yqk-fLkec)를 참고했다.
+
+### 1. 이미지(AMI) 생성하기
+
+Auto Scale은 트래픽이 많이 들어왔을 때, 웹 서버 인스턴스를 자동으로 생성해주거나 종료해주는 서비스를 말한다. 웹 서버 인스턴스를 자동으로 생성하기 위해서는 원래의 웹 서버와 완전하게 똑같은 파일과 구성을 가진 환경을 복사해야하는데, 이를 이미지화시켜서 저장해놓았다가 필요할 때 Auto Scale이 쓰도록 한다.  
+
+![image](image42.png)  
+
+![image](image43.png) 
+
+AMI 탭에 들어가면 이미지가 잘 생성된 것을 확인할 수 있다.  
+
+이제 생성한 AMI를 이용해서  인스턴스를 만들어보자.  
+
+![image](image44.png)  
+
+주의할 점은, 이미지에서 인스턴스를 생성할 때는 그 환경만 생성하기 때문에 웹서버를 구동하는 과정을 선언해줘야 한다. 고급 세부 정보 칸에서 사용자 데이터(User-data)에 서버 구동을 위한 SSH 스크립트를 작성해준다([AWS 공식문서](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/user-data.html)).  
+
+1. 스트립트가 작동이 안되는데 뭐가 문제인지 모르겠다면 인스턴스에 접속해서 `/var/log/cloud-init.log` or `/var/log/cloud-init-output.log`를 확인하자([Stackoverlow](https://stackoverflow.com/questions/15904095/how-to-check-whether-my-user-data-passing-to-ec2-instance-working-or-not))  
+2. 퍼블릭 IP 자동 할당은 안해도 로드 밸런서에서 알아서 잘해준다(내가 해봤다).
+
+### 2. Launch Template(시작 템플릿)
+
+시작 템플릿이란 이미지, 인스턴스 유형, 네트워크 설정, 보안 그룹 등을 미리 템플릿으로써 설정해놓고 해당 구성을 쉽게 생성하기 위해 사용한다. 보통 Auto Scale에서 똑같은 구성의 인스턴스를 여러개 생성할 때 사용함. EC2 -> 인스턴스  -> 시작 템플릿 -> 시작 템플릿 생성  
+
+그 다음에는 위에서 인스턴스 생성할 때 했던 것 처럼 설정을 골라주면 되는데, 마지막에 고급 세부정보를 눌러서 사용자 데이터를 입력해주는걸 잊지말자.  
+
+![image](image45.png)  
+
+### 3. Auto Scaling Group 생성
+
+EC2탭 -> Auto Scaling -> Auto Scaling Group -> 생성누르고 시키는대로 눌러주면 된다. 로드밸런서는 기존의 것을 사용하자.  
+
+![image](image46.png)  
+
+![image](image47.png)  
+
+![image](image48.png)  
+
+생성완료  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ---
