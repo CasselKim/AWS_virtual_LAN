@@ -246,11 +246,11 @@ SSH에서 EC2에 접근했다면 우분투 기본설정을 해주도록 하자 (
 
 요렇게 만들어줄거다. 로드밸런서는 클라이언트에게 81번 포트로 먼저 요청을 받아 적절하게 분산, 인스턴스로 이루어진 타겟 그룹에 80번 포트로 요청을 뿌려준다. (자세한 내용은 [생활코딩](https://youtu.be/s9FHdj6jd_U) 참고)  
 
-먼저 타겟그룹부터 만든다. 
+먼저 타겟그룹부터 만든다. EC2 -> 로드밸러서 -> 대상 그룹(Target Group) -> 생성 후 적절하게 설정값을 넣어주자.  
+
+로드밸런서는 타겟 그룹에 대해 30초마다 Health checks를 통해 연결을 확인한다. 이 Health Check를 통해 Auto Scale 여부를 결정하기 때문에 꼭 Health Check가 Healthy하도록 해주자.  
 
 ![image](image34.png)  
-
-이후 인스턴스를 넣어서  타겟 그룹으로 묶어주자.  
 
 그 다음 로드밸런서를 만들텐데, 로드밸런서 -> 로드밸런서 생성 -> 어플리케이션 로드 밸런서 생성 순으로 누른다.  
 
@@ -317,7 +317,45 @@ EC2탭 -> Auto Scaling -> Auto Scaling Group -> 생성누르고 시키는대로 
 
 ![image](image48.png)  
 
-생성완료  
+생성완료. CloudWatch 지표로 모니터링을 한번에 하기 쉽게 하자.  
+
+![image](image50.png)  
+
+### 4. 트래픽 발생시켜서 Auto Scale 테스트하기
+
+glance 라이브러리로 리소스를 모니터링한다.  
+
+`sudo pip3 install glances[gpu]`
+
+`sudo glances`
+
+![image](image51.png)
+
+준비되었으면 cpu 스트레스 명령어를 실행한다.  
+
+`sudo apt install stress`  
+
+`stress --cpu 1 --timeout 700`  
+
+![image](image52.png)  
+
+![image](image53.png)  
+
+~~근데 시간이 좀 오래걸린다~~  
+
+## 8. Route 53 사용하기
+
+마지막이다. DNS(Domain Name Server)에 연동해주는 서비스 Route 53를 Load Balancer에 포장해보자.  
+
+
+
+
+
+
+
+
+
+
 
 
 
