@@ -345,29 +345,32 @@ glance 라이브러리로 리소스를 모니터링한다.
 
 ## 8. Route 53 사용하기
 
-마지막이다. DNS(Domain Name Server)에 연동해주는 서비스 Route 53를 Load Balancer에 포장해보자.  
+마지막이다. DNS(Domain Name Server)에 연동해주는 서비스 Route 53를 Load Balancer에 포장해보자.  [Freenom](https://www.freenom.com/)에 접속해서 무료 도메인을 받는다. (그냥 검색하면 Not Available 오류가 나니 .ga, .tk까지 쳐야함)  
 
+![image](image54.png)  
 
+회원가입과 함께 도메인을 생성했다면 생성했다면 Route53에 접근하여 호스팅 영역을 생성한다.  
 
+![image](image55.png)  
 
+호스팅 영역에 접근해 새로운 레코드를 생성, 로드 밸런서와 연결해준다. 새로운 레코드를 생성했다면 NS 유형의 레코드에서 네임서버 부분을 복사한 뒤에 Freenom의 Nameserver 부분에 붙여넣는다. (내도메인.한국 사이트에서 무료 도메인을 받았다면 네임서버를 커스텀할 수가 없다.)  
 
+![image](image56.png)   ![image](image57.png)  
 
+접속은 잘 되지만 장고에서 막아버린다 ㅜㅜ  
 
+수정사항  
 
+1. 인스턴스 수정 -> AMI 생성 -> Launch Template 수정 -> Auto Scale에서 Template 버전 수정
+2. 클라이언트 -> 로드밸런서는 80번 포트로, 로드밸런서 -> 인스턴스는 8000 포트로 수정  
 
+![image](image58.png)  
 
+완성
 
+## 9. AWS Virtual Network 완성도
 
-
-
-
-
-
-
-
-
-
-
+![image](image59.png)  
 
 
 ---
@@ -383,4 +386,6 @@ glance 라이브러리로 리소스를 모니터링한다.
 [공부혜옹님 블로그](https://hae-ong.tistory.com/25)  
 
 [Che1님 블로그](https://nachwon.github.io/django-deploy-1-aws/)  
+
+[생활코딩 유튜브](https://youtu.be/s9FHdj6jd_U)  
 
