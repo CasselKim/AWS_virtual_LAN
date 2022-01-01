@@ -7,6 +7,10 @@
 3. [라우팅 테이블 설정하기](https://github.com/CasselKim/AWS_virtual_network#3-%EB%9D%BC%EC%9A%B0%ED%8C%85-%ED%85%8C%EC%9D%B4%EB%B8%94-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)
 4. [EC2, RDS랑 VPC 연동하기](https://github.com/CasselKim/AWS_virtual_network#4-ec2-rds%EB%9E%91-vpc-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0)
 5. [EC2 인스턴스에 웹 프로젝트 올리기](https://github.com/CasselKim/AWS_virtual_network#5-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EC%97%90-%EC%9B%B9-%EC%84%9C%EB%B2%84-rds%EC%97%90-mysql-%EC%98%AC%EB%A6%AC%EA%B8%B0)
+6. [로드밸런서(ELB) 써보기](https://github.com/CasselKim/AWS_virtual_network#6-%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9Celb-%EC%8D%A8%EB%B3%B4%EA%B8%B0)
+7. [Auto Scale 써보기](https://github.com/CasselKim/AWS_virtual_network#7-auto-scale-%EC%8D%A8%EB%B3%B4%EA%B8%B0)  
+8. [Route 53 사용하기](https://github.com/CasselKim/AWS_virtual_network#8-route-53-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
+9. [AWS Virtual Network 완성도](https://github.com/CasselKim/AWS_virtual_network#9-aws-virtual-network-%EC%99%84%EC%84%B1%EB%8F%84)
 
 ## 1. Introduce  
 
