@@ -22,7 +22,7 @@ AWS로 가상 네트워크 구축하기
 
 나이브하게 대응시키면  
 
-- PC = EC2internetㅁ
+- PC = EC2internet
 - Switch = 가상 스위치(AWS에서는 subnet이 대신함)
 - Router = Route table
 - Serial Port = Internet Gateway
@@ -43,8 +43,6 @@ AWS로 가상 네트워크 구축하기
 AWS에 로그인하고 검색창에 VPC를 검색하자.  첫번째로 할 일은 Elastic IP(EIP, 탄력적 IP)를 설정해야 하는데, 왼쪽 메뉴창에 탄력적 IP를 눌러서 하나 만들어준다.  
 
 ![image](images/image04.png)  
-
-~~(시간당 0.004달러씩 나가니까 빨리하자)~~  
 
 탄력적 IP란, 원래 AWS 인스턴스를 껐다가 켜면 IP가 바뀌는데 이 IP를 고정시켜주는 서비스를 말한다.  
 
